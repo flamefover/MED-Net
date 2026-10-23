@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mednet-paper"
+version = "0.1.0"
+description = "MED-Net object detection model"
+requires-python = ">=3.9"
+dependencies = ["torch>=2.0", "PyYAML>=6", "einops>=0.6"]
+
+[tool.setuptools.packages.find]
+include = ["mednet*"]
+
+[tool.setuptools.package-data]
+mednet = ["configs/*.yaml"]

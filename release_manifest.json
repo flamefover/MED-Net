@@ -1,0 +1,89 @@
+{
+  "version": "v0.1",
+  "scheduled": [
+    {
+      "file": "mednet/frj.py",
+      "symbol": "sample_gpu_occupancy"
+    },
+    {
+      "file": "mednet/model.py",
+      "symbol": "MEDNet._apply"
+    },
+    {
+      "file": "mednet/model.py",
+      "symbol": "MEDNet.forward"
+    },
+    {
+      "file": "mednet/modules/amdf.py",
+      "symbol": "Bottleneck.__init__"
+    },
+    {
+      "file": "mednet/modules/amdf.py",
+      "symbol": "Bottleneck.forward"
+    },
+    {
+      "file": "mednet/modules/amdf.py",
+      "symbol": "C3k.__init__"
+    },
+    {
+      "file": "mednet/modules/amdf.py",
+      "symbol": "Conv.__init__"
+    },
+    {
+      "file": "mednet/modules/amdf.py",
+      "symbol": "Conv.forward"
+    },
+    {
+      "file": "mednet/modules/amdf.py",
+      "symbol": "autopad"
+    },
+    {
+      "file": "mednet/modules/msc_repvit.py",
+      "symbol": "Conv2d_BN.fuse_self"
+    },
+    {
+      "file": "mednet/modules/msc_repvit.py",
+      "symbol": "replace_batchnorm"
+    },
+    {
+      "file": "mednet/modules/udeh.py",
+      "symbol": "Conv2d_cd.__init__"
+    },
+    {
+      "file": "mednet/modules/udeh.py",
+      "symbol": "Conv2d_cd.get_weight"
+    },
+    {
+      "file": "mednet/modules/udeh.py",
+      "symbol": "Conv2d_hd.get_weight"
+    },
+    {
+      "file": "mednet/modules/udeh.py",
+      "symbol": "Conv_GN.__init__"
+    },
+    {
+      "file": "mednet/modules/udeh.py",
+      "symbol": "DFL.__init__"
+    },
+    {
+      "file": "mednet/modules/udeh.py",
+      "symbol": "DFL.forward"
+    },
+    {
+      "file": "mednet/modules/udeh.py",
+      "symbol": "Scale.__init__"
+    },
+    {
+      "file": "mednet/modules/udeh.py",
+      "symbol": "Scale.forward"
+    },
+    {
+      "file": "mednet/modules/udeh.py",
+      "symbol": "dist2bbox"
+    },
+    {
+      "file": "mednet/modules/udeh.py",
+      "symbol": "make_anchors"
+    }
+  ]
+}
