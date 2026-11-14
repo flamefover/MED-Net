@@ -26,10 +26,17 @@ class DFL(nn.Module):
     """
 
     def __init__(self, c1=16):
-        raise NotImplementedError('DFL.__init__ is scheduled for a later release; see RELEASE_SCOPE.md.')
+        """Initialize a convolutional layer with a given number of input channels."""
+        super().__init__()
+        self.conv = nn.Conv2d(c1, 1, 1, bias=False).requires_grad_(False)
+        x = torch.arange(c1, dtype=torch.float)
+        self.conv.weight.data[:] = nn.Parameter(x.view(1, c1, 1, 1))
+        self.c1 = c1
 
     def forward(self, x):
-        raise NotImplementedError('DFL.forward is scheduled for a later release; see RELEASE_SCOPE.md.')
+        """Applies a transformer layer on input tensor 'x' and returns a tensor."""
+        b, _, a = x.shape  # batch, channels, anchors
+        return self.conv(x.view(b, 4, self.c1, a).transpose(2, 1).softmax(1)).view(b, 4, a)
 
 def make_anchors(feats, strides, grid_cell_offset=0.5):
     raise NotImplementedError('make_anchors is scheduled for a later release; see RELEASE_SCOPE.md.')
@@ -48,10 +55,11 @@ class Scale(nn.Module):
     """
 
     def __init__(self, scale: float = 1.0):
-        raise NotImplementedError('Scale.__init__ is scheduled for a later release; see RELEASE_SCOPE.md.')
+        super().__init__()
+        self.scale = nn.Parameter(torch.tensor(scale, dtype=torch.float))
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        raise NotImplementedError('Scale.forward is scheduled for a later release; see RELEASE_SCOPE.md.')
+        return x * self.scale
 
 class Conv_GN(nn.Module):
     """Standard convolution with args(ch_in, ch_out, kernel, stride, padding, groups, dilation, activation)."""
@@ -59,7 +67,11 @@ class Conv_GN(nn.Module):
     default_act = nn.SiLU()  # default activation
 
     def __init__(self, c1, c2, k=1, s=1, p=None, g=1, d=1, act=True):
-        raise NotImplementedError('Conv_GN.__init__ is scheduled for a later release; see RELEASE_SCOPE.md.')
+        """Initialize Conv layer with given arguments including activation."""
+        super().__init__()
+        self.conv = nn.Conv2d(c1, c2, k, s, autopad(k, p, d), groups=g, dilation=d, bias=False)
+        self.gn = nn.GroupNorm(16, c2)
+        self.act = self.default_act if act is True else act if isinstance(act, nn.Module) else nn.Identity()
 
     def forward(self, x):
         """Apply convolution, batch normalization and activation to input tensor."""
@@ -69,10 +81,21 @@ class Conv2d_cd(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size=3, stride=1,
                  padding=1, dilation=1, groups=1, bias=False, theta=1.0):
 
-        raise NotImplementedError('Conv2d_cd.__init__ is scheduled for a later release; see RELEASE_SCOPE.md.')
+        if kernel_size != 3:
+            raise ValueError('Detail difference convolutions require kernel_size=3')
+        super(Conv2d_cd, self).__init__() 
+        self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, stride=stride, padding=padding, dilation=dilation, groups=groups, bias=bias)
+        self.theta = theta
     
     def get_weight(self):
-        raise NotImplementedError('Conv2d_cd.get_weight is scheduled for a later release; see RELEASE_SCOPE.md.')
+        conv_weight = self.conv.weight
+        conv_shape = conv_weight.shape
+        conv_weight = conv_weight.flatten(2)
+        conv_weight_cd = conv_weight.new_zeros(conv_shape[0], conv_shape[1], 9)
+        conv_weight_cd[:, :, :] = conv_weight[:, :, :]
+        conv_weight_cd[:, :, 4] = conv_weight[:, :, 4] - self.theta * conv_weight[:, :, :].sum(2)
+        conv_weight_cd = conv_weight_cd.reshape(conv_shape)
+        return conv_weight_cd, self.conv.bias
 
 
 class Conv2d_hd(nn.Module):
@@ -85,7 +108,13 @@ class Conv2d_hd(nn.Module):
         self.conv = nn.Conv1d(in_channels, out_channels, kernel_size=kernel_size, stride=stride, padding=padding, dilation=dilation, groups=groups, bias=bias)
 
     def get_weight(self):
-        raise NotImplementedError('Conv2d_hd.get_weight is scheduled for a later release; see RELEASE_SCOPE.md.')
+        conv_weight = self.conv.weight
+        conv_shape = conv_weight.shape
+        conv_weight_hd = conv_weight.new_zeros(conv_shape[0], conv_shape[1], 9)
+        conv_weight_hd[:, :, [0, 3, 6]] = conv_weight[:, :, :]
+        conv_weight_hd[:, :, [2, 5, 8]] = -conv_weight[:, :, :]
+        conv_weight_hd = conv_weight_hd.reshape(conv_shape[0], conv_shape[1], conv_shape[2], conv_shape[2])
+        return conv_weight_hd, self.conv.bias
 
 class Conv2d_vd(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size=3, stride=1,
