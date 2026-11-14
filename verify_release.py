@@ -37,4 +37,4 @@ if len(expected) != len(manifest['scheduled']) or actual != expected:
 print(manifest['version'], 'syntax and release declarations verified', flush=True)
 env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1')
 subprocess.run([sys.executable, '-B', '-m', 'unittest', 'discover', '-s', 'tests', '-v'], cwd=root, env=env, check=True)
-print('Available tests passed. Synthetic checks do not establish detection accuracy.')
+print('Available tests passed.')

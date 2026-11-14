@@ -1,5 +1,5 @@
 {
-  "version": "v0.1",
+  "version": "v0.2",
   "scheduled": [
     {
       "file": "mednet/frj.py",
@@ -44,38 +44,6 @@
     {
       "file": "mednet/modules/msc_repvit.py",
       "symbol": "replace_batchnorm"
-    },
-    {
-      "file": "mednet/modules/udeh.py",
-      "symbol": "Conv2d_cd.__init__"
-    },
-    {
-      "file": "mednet/modules/udeh.py",
-      "symbol": "Conv2d_cd.get_weight"
-    },
-    {
-      "file": "mednet/modules/udeh.py",
-      "symbol": "Conv2d_hd.get_weight"
-    },
-    {
-      "file": "mednet/modules/udeh.py",
-      "symbol": "Conv_GN.__init__"
-    },
-    {
-      "file": "mednet/modules/udeh.py",
-      "symbol": "DFL.__init__"
-    },
-    {
-      "file": "mednet/modules/udeh.py",
-      "symbol": "DFL.forward"
-    },
-    {
-      "file": "mednet/modules/udeh.py",
-      "symbol": "Scale.__init__"
-    },
-    {
-      "file": "mednet/modules/udeh.py",
-      "symbol": "Scale.forward"
     },
     {
       "file": "mednet/modules/udeh.py",

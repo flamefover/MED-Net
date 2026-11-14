@@ -1,6 +1,6 @@
 # Release scope
 
-Release: v0.1
+Release: v0.2
 
 
 This release provides the MED-Net architecture configuration and the module implementations listed below.
@@ -39,12 +39,12 @@ Scheduled implementations: `Conv2d_BN.fuse_self`, `replace_batchnorm`.
 
 ## mednet/modules/udeh.py
 
-Provided implementations: `Conv2d_hd.__init__`, `Conv2d_vd.__init__`, `Conv2d_vd.get_weight`, `Conv_GN.forward`, `DEConv.__init__`, `DEConv.forward`, `DEConv.switch_to_deploy`, `DEConv_GN.__init__`, `UDEH.__init__`, `UDEH.bias_init`, `UDEH.decode_bboxes`, `UDEH.forward`, `autopad`.
+Provided implementations: `Conv2d_cd.__init__`, `Conv2d_cd.get_weight`, `Conv2d_hd.__init__`, `Conv2d_hd.get_weight`, `Conv2d_vd.__init__`, `Conv2d_vd.get_weight`, `Conv_GN.__init__`, `Conv_GN.forward`, `DEConv.__init__`, `DEConv.forward`, `DEConv.switch_to_deploy`, `DEConv_GN.__init__`, `DFL.__init__`, `DFL.forward`, `Scale.__init__`, `Scale.forward`, `UDEH.__init__`, `UDEH.bias_init`, `UDEH.decode_bboxes`, `UDEH.forward`, `autopad`.
 
-Scheduled implementations: `Conv2d_cd.__init__`, `Conv2d_cd.get_weight`, `Conv2d_hd.get_weight`, `Conv_GN.__init__`, `DFL.__init__`, `DFL.forward`, `Scale.__init__`, `Scale.forward`, `dist2bbox`, `make_anchors`.
+Scheduled implementations: `dist2bbox`, `make_anchors`.
 
-## Runtime and evidence
+## Usage
 
-Scheduled methods explicitly raise NotImplementedError when called. No identity substitutions or fabricated outputs are used. An available method may still depend on a scheduled method. Installation/import alone does not imply that end-to-end execution is available.
+The lists above identify the implementations included in v0.2 and those scheduled for subsequent releases. Scheduled methods raise `NotImplementedError`. See [README.md](README.md) for the backbone usage example.
 
-Reference training, evaluation, split-manifest validation and device profiling tools are provided in v1.0. Datasets and trained weights are not bundled; supply a labeled dataset to train and evaluate the network.
+Reference training, evaluation, split-manifest validation and device profiling tools are planned for v1.0.

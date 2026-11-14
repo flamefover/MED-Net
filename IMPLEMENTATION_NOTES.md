@@ -18,8 +18,8 @@ This document describes the MED-Net architecture, configuration and execution in
 
 ## Run and inspect
 
-The full-model example below requires v1.0. Earlier releases provide a runnable
-backbone example in README.md and explicitly gate unavailable methods.
+For v0.2, use the backbone example in [README.md](README.md). The full-model
+example below is intended for v1.0.
 
 ```sh
 pip install -e .
@@ -39,7 +39,7 @@ with torch.no_grad():
     predictions, raw = model(torch.zeros(1, 3, 640, 640, device='cuda'))
 ```
 
-CPU architecture tests can explicitly pass a simulated ratio, e.g. `MEDNet(nc=4, occupancy=0.75)`. This is a test input, not a resource measurement. `route_mode='wide'` or `'deep'` disables selection and fixes all paths for ablation. Reconstruct the model for another route; do not change routing after loading a route-specific checkpoint.
+CPU architecture tests can explicitly pass a simulated ratio, e.g. `MEDNet(nc=4, occupancy=0.75)`. `route_mode='wide'` or `'deep'` disables selection and fixes all paths for ablation. Reconstruct the model for another route; do not change routing after loading a route-specific checkpoint.
 
 ## Adopted implementation choices
 
@@ -48,11 +48,11 @@ CPU architecture tests can explicitly pass a simulated ratio, e.g. `MEDNet(nc=4,
 - The Efficient Module retains its existing internal C3k-style concatenation. This internal operation is distinct from the outer Wise-Joint addition.
 - The default width/depth scale is `n`; the model configuration includes SPPF and C2PSA.
 - MFG uses independent parameters at each scale because channel counts differ.
-- `check_requirements` is an explicit interface for a measured accuracy/latency/memory profile. No validated profiles are supplied, and model construction does not pretend these requirements have passed. Before deployment, the caller must check the exact selected route and checkpoint on the target device and reject a failing profile.
+- `check_requirements` compares measured accuracy, latency and peak memory against the specified requirements. Supply measurements for the selected route and checkpoint on the target device.
 
 ## Scope
 
-Model implementations are provided in stages, with regression tests for available components in every release. v1.0 adds a reference training/evaluation workflow and tools to validate exact user-supplied splits and measure route resources; see EXPERIMENTS.md in v1.0. Datasets and trained weights must be supplied separately. See RELEASE_SCOPE.md for availability.
+Model implementations are provided in stages, with regression tests for available components in every release. A reference training/evaluation workflow, split validation and route profiling tools are planned for v1.0. See RELEASE_SCOPE.md for availability.
 
 
 
@@ -66,6 +66,5 @@ Model implementations are provided in stages, with regression tests for availabl
   and depthwise cases. Retain the unfused checkpoint and check numerical equivalence.
 - Difference-convolution helpers explicitly support kernel_size=3. Other sizes
   raise ValueError at construction.
-- FRJ thresholds are a fixed initialization heuristic. Path names and parameter
-  counts do not prove resource savings. Use route-specific trained checkpoints
-  and target-device measurements to check requirements before deployment.
+- FRJ uses fixed thresholds at initialization. Use route-specific trained checkpoints
+  and target-device measurements with `check_requirements`.

@@ -17,7 +17,6 @@ def sample_gpu_occupancy(device=0):
 def check_requirements(profile, min_accuracy, max_latency_ms, available_memory_bytes):
     """Use a profile measured for the exact route, checkpoint and target device.
 
-    No measured profiles are bundled; this function does not estimate accuracy.
     Accuracy and min_accuracy must use the same metric and reporting scale.
     """
     keys = ('accuracy','latency_ms','peak_memory_bytes')
